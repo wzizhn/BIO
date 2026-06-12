@@ -3,128 +3,337 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ocean Wang</title>
+<title>Hot Takes Wall</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  :root {
+    --bg: #0a0a0a;
+    --surface: #18181b;
+    --surface-2: #27272a;
+    --border: #2a2a2e;
+    --text: #e5e5e5;
+    --muted: #a1a1aa;
+    --accent: #f97316;
+    --green: #10b981;
+    --red: #ef4444;
+    --spice: #fb923c;
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #0a0a0a;
-    color: #e5e5e5;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
-  .container {
-    max-width: 560px;
-    width: 100%;
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  header {
     text-align: center;
-  }
-
-  .avatar {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    margin: 0 auto 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #fff;
+    margin-bottom: 2.5rem;
   }
 
   h1 {
     font-size: 2.25rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
   }
 
-  .role {
-    color: #a1a1aa;
+  h1 .flame { color: var(--accent); }
+
+  header p {
+    color: var(--muted);
     font-size: 1rem;
-    margin-bottom: 1.5rem;
   }
 
-  .bio {
-    color: #d4d4d8;
-    font-size: 1.05rem;
-    margin-bottom: 2.5rem;
-    max-width: 440px;
-    margin-left: auto;
-    margin-right: auto;
+  form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    display: grid;
+    gap: 0.75rem;
   }
 
-  .links {
+  textarea, input[type="text"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    color: var(--text);
+    font: inherit;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+
+  textarea { min-height: 80px; }
+
+  textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .row {
     display: flex;
     gap: 0.75rem;
-    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
   }
 
-  .link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.25rem;
-    background: #18181b;
-    border: 1px solid #27272a;
+  .row input[type="text"] { flex: 1; min-width: 180px; }
+
+  .counter {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .counter.warn { color: var(--accent); }
+
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
     border-radius: 10px;
-    color: #e5e5e5;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    padding: 0.7rem 1.4rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
   }
 
-  .link:hover {
-    background: #27272a;
-    border-color: #3f3f46;
-    transform: translateY(-2px);
+  button:hover { background: #ea580c; }
+  button:active { transform: scale(0.97); }
+  button:disabled { background: #3f3f46; cursor: not-allowed; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
   }
 
-  .link svg {
-    width: 18px;
-    height: 18px;
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    animation: fade 0.25s ease;
   }
 
-  footer {
-    position: fixed;
-    bottom: 1.5rem;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: #52525b;
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--surface-2);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    align-self: flex-start;
+  }
+
+  .take {
+    font-size: 1rem;
+    color: var(--text);
+    word-wrap: break-word;
+  }
+
+  .reactions {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: auto;
+  }
+
+  .react {
+    flex: 1;
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    color: var(--muted);
     font-size: 0.85rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    font-weight: 500;
+  }
+
+  .react:hover { background: #3f3f46; transform: translateY(-1px); }
+  .react.agree:hover { color: var(--green); border-color: var(--green); }
+  .react.disagree:hover { color: var(--red); border-color: var(--red); }
+  .react.spicy:hover { color: var(--spice); border-color: var(--spice); }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 1rem;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
   }
 </style>
 </head>
 <body>
-  <main class="container">
-    <div class="avatar">OW</div>
-    <h1>Ocean Wang</h1>
-    <p class="role">Year 13 IB Student · Kristin School</p>
-    <p class="bio">
-      High school student exploring code, ideas, and everything in between.
-    </p>
+  <div class="wrap">
+    <header>
+      <h1><span class="flame">🔥</span> Hot Takes Wall</h1>
+      <p>Drop your spiciest opinion. No regrets.</p>
+    </header>
 
-    <div class="links">
-      <a href="https://github.com/wzizhn" class="link" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.16c-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.12 3.04.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.42.36.78 1.05.78 2.13v3.16c0 .31.21.68.8.56 4.56-1.53 7.84-5.83 7.84-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
-        GitHub
-      </a>
-      <a href="https://www.instagram.com/wzizhn_/" class="link" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        Instagram
-      </a>
-    </div>
-  </main>
-  <footer>© 2026 Ocean Wang</footer>
+    <form id="form">
+      <textarea id="take" maxlength="120" placeholder="Your hot take..." required></textarea>
+      <div class="counter" id="counter">0 / 120</div>
+      <div class="row">
+        <input id="topic" type="text" maxlength="24" placeholder="Topic (e.g. tech, food, music)" required />
+        <button type="submit">Post Take</button>
+      </div>
+    </form>
+
+    <div id="wall" class="grid"></div>
+  </div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  // 🔑 Replace these with your Supabase project credentials
+  const SUPABASE_URL = 'https://nbxjwwhgyxxgfdqvrtoo.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieGp3d2hneXh4Z2ZkcXZydG9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTA3MjMsImV4cCI6MjA5Njg2NjcyM30.A2dsopGtaqPZsHkFzZ6WP2nqshG3JmUn17r50KLC7KA';
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const form = document.getElementById('form');
+  const takeInput = document.getElementById('take');
+  const topicInput = document.getElementById('topic');
+  const counter = document.getElementById('counter');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const wall = document.getElementById('wall');
+
+  let takes = [];
+
+  function escape(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  function render() {
+    if (takes.length === 0) {
+      wall.innerHTML = '<div class="empty">No takes yet. Be the first to start a fire.</div>';
+      wall.style.display = 'block';
+      return;
+    }
+    wall.style.display = 'grid';
+    wall.innerHTML = takes.map(t => `
+      <div class="card" data-id="${t.id}">
+        <span class="tag">#${escape(t.topic)}</span>
+        <div class="take">${escape(t.text)}</div>
+        <div class="reactions">
+          <button type="button" class="react agree" data-react="agree">👍 ${t.agree}</button>
+          <button type="button" class="react disagree" data-react="disagree">👎 ${t.disagree}</button>
+          <button type="button" class="react spicy" data-react="spicy">🌶️ ${t.spicy}</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function loadTakes() {
+    const { data, error } = await supabase
+      .from('takes')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      wall.innerHTML = `<div class="empty">Error loading takes: ${escape(error.message)}</div>`;
+      return;
+    }
+    takes = data;
+    render();
+  }
+
+  takeInput.addEventListener('input', () => {
+    const len = takeInput.value.length;
+    counter.textContent = `${len} / 120`;
+    counter.classList.toggle('warn', len > 100);
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const text = takeInput.value.trim();
+    const topic = topicInput.value.trim().replace(/^#/, '');
+    if (!text || !topic) return;
+
+    submitBtn.disabled = true;
+    const { data, error } = await supabase
+      .from('takes')
+      .insert({ text, topic })
+      .select()
+      .single();
+    submitBtn.disabled = false;
+
+    if (error) {
+      alert('Failed to post take: ' + error.message);
+      return;
+    }
+
+    takes.unshift(data);
+    render();
+    form.reset();
+    counter.textContent = '0 / 120';
+    counter.classList.remove('warn');
+  });
+
+  wall.addEventListener('click', async e => {
+    const btn = e.target.closest('.react');
+    if (!btn) return;
+    const card = btn.closest('.card');
+    const id = card.dataset.id;
+    const kind = btn.dataset.react;
+    const take = takes.find(t => t.id === id);
+    if (!take) return;
+
+    // Optimistic update
+    take[kind]++;
+    render();
+
+    const { error } = await supabase.rpc('increment_reaction', {
+      take_id: id,
+      kind: kind,
+    });
+    if (error) {
+      take[kind]--;
+      render();
+      alert('Failed to react: ' + error.message);
+    }
+  });
+
+  // Realtime: live updates when others post or react
+  supabase
+    .channel('takes-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'takes' }, () => {
+      loadTakes();
+    })
+    .subscribe();
+
+  loadTakes();
+</script>
 </body>
 </html>
